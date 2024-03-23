@@ -34,7 +34,6 @@ public class MedicalProcedureService {
     public List<MedicalProcedure> getProcedureBySpecializationId(int specializationId) {
         return medicalProcedureRepository.findBySpecializationId(specializationId);
     }
-
     public MedicalProcedure updateProcedure(MedicalProcedure updatedProcedure) {
         Optional<MedicalProcedure> existingProcedure = medicalProcedureRepository.findById(updatedProcedure.getId());
         if (existingProcedure.isPresent()) {
