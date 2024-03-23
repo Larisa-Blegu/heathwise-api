@@ -1,6 +1,6 @@
 package com.healthwise.HealthwiseApp.config;
 
-import com.healthwise.HealthwiseApp.util.exception.UserNotFoundException;
+import com.healthwise.HealthwiseApp.util.exception.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,7 +24,7 @@ public class ApplicationConfig {
         return email -> {
             User user = userRepository.findByEmail(email);
             if (user == null) {
-                throw new UserNotFoundException("User not found!");
+                throw new ResourceNotFoundException("User not found!");
             }
             return new org.springframework.security.core.userdetails.User(
                     user.getUsername(),

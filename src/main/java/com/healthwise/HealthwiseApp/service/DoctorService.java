@@ -1,23 +1,18 @@
 package com.healthwise.HealthwiseApp.service;
 
-import com.healthwise.HealthwiseApp.dto.UserDTO;
-import com.healthwise.HealthwiseApp.dto.buider.UserBuilder;
 import com.healthwise.HealthwiseApp.entity.Doctor;
 import com.healthwise.HealthwiseApp.entity.Location;
 import com.healthwise.HealthwiseApp.entity.Specialization;
-import com.healthwise.HealthwiseApp.entity.User;
 import com.healthwise.HealthwiseApp.repository.DoctorRepository;
 import com.healthwise.HealthwiseApp.repository.LocationRepository;
 import com.healthwise.HealthwiseApp.repository.SpecializationRepository;
-import com.healthwise.HealthwiseApp.repository.UserRepository;
-import com.healthwise.HealthwiseApp.util.exception.UserNotFoundException;
+import com.healthwise.HealthwiseApp.util.exception.ResourceNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 @Service
 @AllArgsConstructor
@@ -52,12 +47,12 @@ public class DoctorService {
             doctor.setImage(updatedDoctor.getImage());
             return doctorRepository.save(doctor);
         } else {
-            throw new UserNotFoundException("Doctor with id: " + updatedDoctor.getId() + " not found");
+            throw new ResourceNotFoundException("Doctor with id: " + updatedDoctor.getId() + " not found");
         }
     }
     public Boolean deleteDoctorById(int id) {
         if (!doctorRepository.existsById(id)) {
-            throw new UserNotFoundException("Doctor with ID " + id + " not found");
+            throw new ResourceNotFoundException("Doctor with ID " + id + " not found");
         }
         doctorRepository.deleteById(id);
         return true;

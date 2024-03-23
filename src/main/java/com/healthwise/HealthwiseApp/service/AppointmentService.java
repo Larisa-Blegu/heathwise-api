@@ -2,15 +2,12 @@ package com.healthwise.HealthwiseApp.service;
 
 import com.healthwise.HealthwiseApp.entity.*;
 import com.healthwise.HealthwiseApp.repository.AppointmentRepository;
-import com.healthwise.HealthwiseApp.repository.ContactRepository;
 import com.healthwise.HealthwiseApp.util.enums.AppointmentReviewStatus;
 import com.healthwise.HealthwiseApp.util.enums.AppointmentStatus;
 import com.healthwise.HealthwiseApp.util.enums.AppointmentType;
-import com.healthwise.HealthwiseApp.util.exception.UserNotFoundException;
+import com.healthwise.HealthwiseApp.util.exception.ResourceNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.event.ApplicationReadyEvent;
-import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -52,12 +49,12 @@ public class AppointmentService {
             appointment.setUser(updatedAppointment.getUser());
             return appointmentRepository.save(appointment);
         } else {
-            throw new UserNotFoundException("Appointment with id: " + updatedAppointment.getId() + " not found");
+            throw new ResourceNotFoundException("Appointment with id: " + updatedAppointment.getId() + " not found");
         }
     }
     public Boolean deleteAppointmentById(int id) {
         if (!appointmentRepository.existsById(id)) {
-            throw new UserNotFoundException("Appointment with ID " + id + " not found");
+            throw new ResourceNotFoundException("Appointment with ID " + id + " not found");
         }
         appointmentRepository.deleteById(id);
         return true;

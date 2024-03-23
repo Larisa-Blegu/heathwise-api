@@ -5,7 +5,7 @@ import com.healthwise.HealthwiseApp.dto.UserDTOToken;
 import com.healthwise.HealthwiseApp.dto.buider.UserBuilder;
 import com.healthwise.HealthwiseApp.entity.User;
 import com.healthwise.HealthwiseApp.repository.UserRepository;
-import com.healthwise.HealthwiseApp.util.exception.UserNotFoundException;
+import com.healthwise.HealthwiseApp.util.exception.ResourceNotFoundException;
 import com.healthwise.HealthwiseApp.util.ServiceUtils;
 
 import lombok.AllArgsConstructor;
@@ -15,10 +15,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.PushBuilder;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 import static com.healthwise.HealthwiseApp.util.enums.UserRole.CLIENT;
 
@@ -44,7 +42,7 @@ public class UserService {
         if(userOptional != null) {
             return userDTO;
         } else {
-            throw new UserNotFoundException(User.class.getSimpleName() + " with email: " + email);
+            throw new ResourceNotFoundException(User.class.getSimpleName() + " with email: " + email);
         }
     }
     public User addUser(User user){
@@ -68,7 +66,7 @@ public class UserService {
             var jwtToken = jwtService.generateToken(user);
             return userBuilder.toUserDTOToken(user, jwtToken);
         }else{
-            throw new UserNotFoundException("Email or password incorect");
+            throw new ResourceNotFoundException("Email or password incorect");
         }
     }
     public List<User> getAllUsers(){
@@ -77,7 +75,7 @@ public class UserService {
     public UserDTO getUserById(int id){
         Optional<User> user = userRepository.findById(id);
         if(user.isEmpty()){
-            throw new UserNotFoundException(User.class.getSimpleName() + " with id " + id);
+            throw new ResourceNotFoundException(User.class.getSimpleName() + " with id " + id);
         }
         User fetchedUser = user.get();
         return UserBuilder.toUserDTO(fetchedUser);
@@ -90,12 +88,12 @@ public class UserService {
             ServiceUtils.updateFields(newUser, user);
             return UserBuilder.toUserDTO(userRepository.save(newUser));
         }else{
-            throw new UserNotFoundException(User.class.getSimpleName() + " with id: " + user.getId());
+            throw new ResourceNotFoundException(User.class.getSimpleName() + " with id: " + user.getId());
         }
     }
     public Boolean deleteUserById(int id) {
         if (!userRepository.existsById(id)) {
-            throw new UserNotFoundException("User with ID " + id + " not found");
+            throw new ResourceNotFoundException("User with ID " + id + " not found");
         }
         userRepository.deleteById(id);
         return true;

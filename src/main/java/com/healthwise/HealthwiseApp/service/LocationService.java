@@ -1,10 +1,8 @@
 package com.healthwise.HealthwiseApp.service;
 
 import com.healthwise.HealthwiseApp.entity.Location;
-import com.healthwise.HealthwiseApp.entity.Specialization;
 import com.healthwise.HealthwiseApp.repository.LocationRepository;
-import com.healthwise.HealthwiseApp.repository.SpecializationRepository;
-import com.healthwise.HealthwiseApp.util.exception.UserNotFoundException;
+import com.healthwise.HealthwiseApp.util.exception.ResourceNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -43,12 +41,12 @@ public class LocationService {
             location.setDoctors(updatedLocation.getDoctors());
             return locationRepository.save(location);
         } else {
-            throw new UserNotFoundException("Location with id: " + updatedLocation.getId() + " not found");
+            throw new ResourceNotFoundException("Location with id: " + updatedLocation.getId() + " not found");
         }
     }
     public Boolean deleteLocationById(int id) {
         if (!locationRepository.existsById(id)) {
-            throw new UserNotFoundException("Location with ID " + id + " not found");
+            throw new ResourceNotFoundException("Location with ID " + id + " not found");
         }
         locationRepository.deleteById(id);
         return true;

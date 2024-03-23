@@ -1,10 +1,8 @@
 package com.healthwise.HealthwiseApp.service;
 
-import com.healthwise.HealthwiseApp.entity.Contact;
 import com.healthwise.HealthwiseApp.entity.Review;
-import com.healthwise.HealthwiseApp.repository.ContactRepository;
 import com.healthwise.HealthwiseApp.repository.ReviewRepository;
-import com.healthwise.HealthwiseApp.util.exception.UserNotFoundException;
+import com.healthwise.HealthwiseApp.util.exception.ResourceNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -55,12 +53,12 @@ public class ReviewService {
             review.setDoctor(updatedReview.getDoctor());
             return reviewRepository.save(review);
         } else {
-            throw new UserNotFoundException("Contact with id: " + updatedReview.getId() + " not found");
+            throw new ResourceNotFoundException("Contact with id: " + updatedReview.getId() + " not found");
         }
     }
     public Boolean deleteReviewById(int id) {
         if (!reviewRepository.existsById(id)) {
-            throw new UserNotFoundException("Review with ID " + id + " not found");
+            throw new ResourceNotFoundException("Review with ID " + id + " not found");
         }
         reviewRepository.deleteById(id);
         return true;
