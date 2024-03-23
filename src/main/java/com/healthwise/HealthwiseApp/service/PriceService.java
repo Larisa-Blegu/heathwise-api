@@ -1,14 +1,10 @@
 package com.healthwise.HealthwiseApp.service;
 
-import com.healthwise.HealthwiseApp.entity.MedicalProcedure;
 import com.healthwise.HealthwiseApp.entity.Price;
-import com.healthwise.HealthwiseApp.entity.Review;
 import com.healthwise.HealthwiseApp.repository.PriceRepository;
-import com.healthwise.HealthwiseApp.repository.ReviewRepository;
-import com.healthwise.HealthwiseApp.util.exception.UserNotFoundException;
+import com.healthwise.HealthwiseApp.util.exception.ResourceNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -44,12 +40,12 @@ public class PriceService {
             price.setDoctor(updatedPrice.getDoctor());
             return priceRepository.save(price);
         } else {
-            throw new UserNotFoundException("Price with id: " + updatedPrice.getId() + " not found");
+            throw new ResourceNotFoundException("Price with id: " + updatedPrice.getId() + " not found");
         }
     }
     public Boolean deletePriceById(int id) {
         if (!priceRepository.existsById(id)) {
-            throw new UserNotFoundException("Price with ID " + id + " not found");
+            throw new ResourceNotFoundException("Price with ID " + id + " not found");
         }
         priceRepository.deleteById(id);
         return true;

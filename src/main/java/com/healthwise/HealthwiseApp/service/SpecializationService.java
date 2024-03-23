@@ -1,10 +1,8 @@
 package com.healthwise.HealthwiseApp.service;
 
-import com.healthwise.HealthwiseApp.entity.Contact;
-import com.healthwise.HealthwiseApp.entity.Doctor;
 import com.healthwise.HealthwiseApp.entity.Specialization;
 import com.healthwise.HealthwiseApp.repository.SpecializationRepository;
-import com.healthwise.HealthwiseApp.util.exception.UserNotFoundException;
+import com.healthwise.HealthwiseApp.util.exception.ResourceNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -38,12 +36,12 @@ public class SpecializationService {
             specialization.setDoctors(updatedSpecialization.getDoctors());
             return specializationRepository.save(specialization);
         } else {
-            throw new UserNotFoundException("Specialization with id: " + updatedSpecialization.getId() + " not found");
+            throw new ResourceNotFoundException("Specialization with id: " + updatedSpecialization.getId() + " not found");
         }
     }
     public Boolean deleteSpecializationById(int id) {
         if (!specializationRepository.existsById(id)) {
-            throw new UserNotFoundException("Specialization with ID " + id + " not found");
+            throw new ResourceNotFoundException("Specialization with ID " + id + " not found");
         }
         specializationRepository.deleteById(id);
         return true;

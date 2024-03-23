@@ -1,12 +1,8 @@
 package com.healthwise.HealthwiseApp.service;
 
-import com.healthwise.HealthwiseApp.entity.Contact;
-import com.healthwise.HealthwiseApp.entity.Location;
 import com.healthwise.HealthwiseApp.entity.MedicalProcedure;
-import com.healthwise.HealthwiseApp.entity.Review;
-import com.healthwise.HealthwiseApp.repository.ContactRepository;
 import com.healthwise.HealthwiseApp.repository.MedicalProcedureRepository;
-import com.healthwise.HealthwiseApp.util.exception.UserNotFoundException;
+import com.healthwise.HealthwiseApp.util.exception.ResourceNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -48,12 +44,12 @@ public class MedicalProcedureService {
             medicalProcedure.setSpecialization(updatedProcedure.getSpecialization());
             return medicalProcedureRepository.save(medicalProcedure);
         } else {
-            throw new UserNotFoundException("Contact with id: " + updatedProcedure.getId() + " not found");
+            throw new ResourceNotFoundException("Contact with id: " + updatedProcedure.getId() + " not found");
         }
     }
     public Boolean deleteProcedureById(int id) {
         if (!medicalProcedureRepository.existsById(id)) {
-            throw new UserNotFoundException("Procedure with ID " + id + " not found");
+            throw new ResourceNotFoundException("Procedure with ID " + id + " not found");
         }
         medicalProcedureRepository.deleteById(id);
         return true;
