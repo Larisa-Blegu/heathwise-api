@@ -34,7 +34,7 @@ public class DoctorController {
     }
     @GetMapping(value = "/{id}")
     public ResponseEntity<?> getDoctorById(@PathVariable int id){
-        Optional<Doctor> doctor = doctorService.getDoctorById(id);
+        Doctor doctor = doctorService.getDoctorById(id);
         return ResponseEntity.ok(doctor);
     }
     @GetMapping(value="/getDoctor/{partialName}")
@@ -42,9 +42,8 @@ public class DoctorController {
         List<Doctor> allDoctors = doctorService.getDoctorsByName(partialName);
         return ResponseEntity.ok(allDoctors);
     }
-    @PutMapping("/update/{id}")
-    public ResponseEntity<?> updateDoctor(@PathVariable int id, @RequestBody Doctor updatedDoctor) {
-        updatedDoctor.setId(id);
+    @PutMapping()
+    public ResponseEntity<?> updateDoctor(@RequestBody Doctor updatedDoctor) {
         Doctor updated = doctorService.updateDoctor(updatedDoctor);
         return ResponseEntity.ok("Doctor updated");
     }

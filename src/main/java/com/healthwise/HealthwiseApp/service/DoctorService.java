@@ -11,6 +11,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.print.Doc;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,8 +31,8 @@ public class DoctorService {
     public List<Doctor> getAllDoctors(){
         return doctorRepository.findAll();
     }
-    public Optional<Doctor> getDoctorById(int id){
-        return doctorRepository.findById(id);
+    public Doctor getDoctorById(int id){
+        return doctorRepository.getById(id);
     }
     public List<Doctor> getDoctorsByName(String partialName){
         String newPartialName = "%" + partialName + "%";

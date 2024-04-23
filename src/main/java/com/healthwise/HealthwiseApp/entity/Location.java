@@ -1,6 +1,7 @@
 package com.healthwise.HealthwiseApp.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 
 import javax.persistence.*;
@@ -26,9 +27,15 @@ public class Location {
     private String city;
 
     @Column(nullable = false)
-    private String adress;
+    private String address;
 
-    @JsonIgnore
+    @Column(nullable = false)
+    private double latitude;
+
+    @Column(nullable = false)
+    private double longitude;
+
+    @JsonIgnoreProperties("locations")
     @ManyToMany(mappedBy = "locations", fetch = FetchType.LAZY)
     private List<Doctor> doctors = new ArrayList<>();
 }

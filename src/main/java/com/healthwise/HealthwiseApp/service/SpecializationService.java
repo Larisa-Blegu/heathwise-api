@@ -28,11 +28,16 @@ public class SpecializationService {
     public List<Specialization> getSpecializationByName(String name){
         return specializationRepository.getSpecializationByName(name);
     }
+    public List<Specialization> getSpecializationsByDoctorId(int doctorId){
+        return specializationRepository.findByDoctorsId(doctorId);
+    }
     public Specialization updateSpecialization(Specialization updatedSpecialization) {
         Optional<Specialization> existingSpecialization = specializationRepository.findById(updatedSpecialization.getId());
         if (existingSpecialization.isPresent()) {
             Specialization specialization = existingSpecialization.get();
             specialization.setName(updatedSpecialization.getName());
+            specialization.setDescription(updatedSpecialization.getDescription());
+            specialization.setDescriptionDisease(updatedSpecialization.getDescriptionDisease());
             specialization.setDoctors(updatedSpecialization.getDoctors());
             return specializationRepository.save(specialization);
         } else {

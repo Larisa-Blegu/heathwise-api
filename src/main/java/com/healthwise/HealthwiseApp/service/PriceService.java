@@ -31,6 +31,10 @@ public class PriceService {
     public List<Price> getPriceByProcedureId(int procedureId) {
         return priceRepository.findByMedicalProcedureId(procedureId);
     }
+
+    public List<Price> getPriceByDoctorIdProcedureId(int doctorId, int procedureId){
+        return priceRepository.findByDoctorIdAndMedicalProcedureId(doctorId, procedureId);
+    }
     public Price updatePrice(Price updatedPrice) {
         Optional<Price> existingPrice = priceRepository.findById(updatedPrice.getId());
         if (existingPrice.isPresent()) {

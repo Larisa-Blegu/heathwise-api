@@ -46,9 +46,14 @@ public class PriceController {
         List<Price> prices = priceService.getPriceByProcedureId(procedureId);
         return ResponseEntity.ok(prices);
     }
-    @PutMapping("/update/{id}")
-    public ResponseEntity<?> updatePrice(@PathVariable int id, @RequestBody Price updatedPrice) {
-        updatedPrice.setId(id);
+
+    @GetMapping("/doctorAndProcedure/{doctorId}/{procedureId}")
+    public ResponseEntity<List<Price>> getPriceByDoctorIdProcedureId(@PathVariable int doctorId, @PathVariable int procedureId){
+        List<Price> prices = priceService.getPriceByDoctorIdProcedureId(doctorId, procedureId);
+        return ResponseEntity.ok(prices);
+    }
+    @PutMapping()
+    public ResponseEntity<?> updatePrice(@RequestBody Price updatedPrice) {
         Price updated = priceService.updatePrice(updatedPrice);
         return ResponseEntity.ok("Price updated");
     }

@@ -47,6 +47,8 @@ public class AppointmentService {
             appointment.setLocation(updatedAppointment.getLocation());
             appointment.setMedicalProcedure(updatedAppointment.getMedicalProcedure());
             appointment.setUser(updatedAppointment.getUser());
+            appointment.setReviewStatus(updatedAppointment.getReviewStatus());
+            appointment.setStatus(updatedAppointment.getStatus());
             return appointmentRepository.save(appointment);
         } else {
             throw new ResourceNotFoundException("Appointment with id: " + updatedAppointment.getId() + " not found");
@@ -83,7 +85,7 @@ public class AppointmentService {
         String message = "Buna ziua! Programarea dumneavoastra a fost realizata cu succes la data de:" + appointment.getDate() + " la doctorul " +
                 doctor.getFullName();
         if(appointment.getType() == AppointmentType.PHYSICAL){
-              message += ". Va asteptam la adresa: " + location.getAdress() + " din orasul " + location.getCity();
+              message += ". Va asteptam la adresa: " + location.getAddress() + " din orasul " + location.getCity();
         }else{
             message += "Programarea se va tine ONLINE, accesand urmatorul link, la data si ora stabilita" + "\n" + "link";
         }

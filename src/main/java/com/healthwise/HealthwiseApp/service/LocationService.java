@@ -37,7 +37,9 @@ public class LocationService {
             Location location = existingLocation.get();
             location.setHospital(updatedLocation.getHospital());
             location.setCity(updatedLocation.getCity());
-            location.setAdress(updatedLocation.getAdress());
+            location.setLatitude(updatedLocation.getLatitude());
+            location.setLongitude(updatedLocation.getLongitude());
+            location.setAddress(updatedLocation.getAddress());
             location.setDoctors(updatedLocation.getDoctors());
             return locationRepository.save(location);
         } else {

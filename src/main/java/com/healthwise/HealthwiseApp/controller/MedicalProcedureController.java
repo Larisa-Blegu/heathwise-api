@@ -1,11 +1,11 @@
 package com.healthwise.HealthwiseApp.controller;
 
-import com.healthwise.HealthwiseApp.entity.Contact;
-import com.healthwise.HealthwiseApp.entity.Location;
-import com.healthwise.HealthwiseApp.entity.MedicalProcedure;
-import com.healthwise.HealthwiseApp.entity.Review;
+import com.healthwise.HealthwiseApp.dto.ContactDTO;
+import com.healthwise.HealthwiseApp.dto.ProcedureDTO;
+import com.healthwise.HealthwiseApp.entity.*;
 import com.healthwise.HealthwiseApp.service.ContactService;
 import com.healthwise.HealthwiseApp.service.MedicalProcedureService;
+import com.healthwise.HealthwiseApp.service.SpecializationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +21,8 @@ import java.util.Optional;
 public class MedicalProcedureController {
     @Autowired
     private MedicalProcedureService medicalProcedureService;
+    @Autowired
+    private SpecializationService specializationService;
     @PostMapping()
     public ResponseEntity<?> addProcedure(@RequestBody MedicalProcedure medicalProcedure){
         MedicalProcedure newMedicalProcedure = medicalProcedureService.addProcedure(medicalProcedure);
@@ -52,12 +54,14 @@ public class MedicalProcedureController {
         return ResponseEntity.ok(procedures);
     }
 
-    @PutMapping("/update/{id}")
-    public ResponseEntity<?> updateProcedure(@PathVariable int id, @RequestBody MedicalProcedure updatedProcedure) {
-        updatedProcedure.setId(id);
-        MedicalProcedure updated = medicalProcedureService.updateProcedure(updatedProcedure);
+    @PutMapping()
+    public ResponseEntity<?> updateProcedure(@RequestBody ProcedureDTO updatedProcedure) {
+        List<Specialization> specialization = specializationService.getSpecializationByName(updatedProcedure.getSpecialization());
+        MedicalProcedure newProcedure = new MedicalProcedure(updatedProcedure.getId(), updatedProcedure.getCategory(), updatedProcedure.getName(), specialization.get(0));
+        MedicalProcedure updated = medicalProcedureService.updateProcedure(newProcedure);
         return ResponseEntity.ok("Procedure updated");
     }
+
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Boolean> deleteProcedureById(@PathVariable int id) {
         Boolean isDeleted = medicalProcedureService.deleteProcedureById(id);

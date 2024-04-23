@@ -2,6 +2,7 @@ package com.healthwise.HealthwiseApp.controller;
 
 import com.healthwise.HealthwiseApp.entity.Contact;
 import com.healthwise.HealthwiseApp.entity.Doctor;
+import com.healthwise.HealthwiseApp.entity.Review;
 import com.healthwise.HealthwiseApp.entity.Specialization;
 import com.healthwise.HealthwiseApp.service.DoctorService;
 import com.healthwise.HealthwiseApp.service.SpecializationService;
@@ -11,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import java.util.List;
 import java.util.Optional;
 
@@ -41,9 +43,13 @@ public class SpecializationController {
         List<Specialization> allspecializations = specializationService.getSpecializationByName(name);
         return ResponseEntity.ok(allspecializations);
     }
-    @PutMapping("/update/{id}")
-    public ResponseEntity<?> updateSpecialization(@PathVariable int id, @RequestBody Specialization updatedSpecialization) {
-        updatedSpecialization.setId(id);
+    @GetMapping(value="/getSpecializations/{doctorId}")
+    public ResponseEntity<List<Specialization>> getSpecializationsByDoctorId(@PathVariable int doctorId){
+        List<Specialization> allspecializations = specializationService.getSpecializationsByDoctorId(doctorId);
+        return ResponseEntity.ok(allspecializations);
+    }
+    @PutMapping()
+    public ResponseEntity<?> updateSpecialization(@RequestBody Specialization updatedSpecialization) {
         Specialization updated = specializationService.updateSpecialization(updatedSpecialization);
         return ResponseEntity.ok("Specialization updated");
     }

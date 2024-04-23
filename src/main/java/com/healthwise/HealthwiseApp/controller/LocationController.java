@@ -44,9 +44,8 @@ public class LocationController {
         List<Location> allLocations = locationService.getLocationByCity(city);
         return ResponseEntity.ok(allLocations);
     }
-    @PutMapping("/update/{id}")
-    public ResponseEntity<?> updateLocation(@PathVariable int id, @RequestBody Location updatedLocation) {
-        updatedLocation.setId(id);
+    @PutMapping()
+    public ResponseEntity<?> updateLocation(@RequestBody Location updatedLocation) {
         Location updated = locationService.updateLocation(updatedLocation);
         return ResponseEntity.ok("Location updated");
     }

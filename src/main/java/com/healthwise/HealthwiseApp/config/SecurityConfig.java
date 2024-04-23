@@ -35,9 +35,39 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/user/register").permitAll()
                 .antMatchers("/user/login").permitAll()// Permiti accesul public pentru inregistrare si autentificare
+
+                .antMatchers("/specialization/*").permitAll()// Permiti accesul public pentru inregistrare si autentificare
+                .antMatchers("/specialization").permitAll()// Permiti accesul public pentru inregistrare si autentificare
+                .antMatchers("/specialization/*/*").permitAll()// Permiti accesul public pentru inregistrare si autentificare
+
+                .antMatchers("/doctor/*").permitAll()// Permiti accesul public pentru inregistrare si autentificare
+                .antMatchers("/doctor").permitAll()// Permiti accesul public pentru inregistrare si autentificare
+                .antMatchers("/doctor/*/*").permitAll()// Permiti accesul public pentru inregistrare si autentificare
+
+                .antMatchers("/medicalProcedure/*").permitAll()// Permiti accesul public pentru inregistrare si autentificare
+                .antMatchers("/medicalProcedure/*/*").permitAll()// Permiti accesul public pentru inregistrare si autentificare
+
+                .antMatchers("/medicalProcedure").permitAll()// Permiti accesul public pentru inregistrare si autentificare
+                .antMatchers("/contact/*").permitAll()// Permiti accesul public pentru inregistrare si autentificare
+                .antMatchers("/contact/*/*").permitAll()// Permiti accesul public pentru inregistrare si autentificare
+
+                .antMatchers("/contact").permitAll()// Permiti accesul public pentru inregistrare si autentificare
+                .antMatchers("/location/*").permitAll()// Permiti accesul public pentru inregistrare si autentificare
+                .antMatchers("/location/*/*").permitAll()// Permiti accesul public pentru inregistrare si autentificare
+
+                .antMatchers("/location").permitAll()// Permiti accesul public pentru inregistrare si autentificare
+                .antMatchers("/price/*").permitAll()// Permiti accesul public pentru inregistrare si autentificare
+                .antMatchers("/price/*/*").permitAll()// Permiti accesul public pentru inregistrare si autentificare
+                .antMatchers("/price/*/*/*").permitAll()// Permiti accesul public pentru inregistrare si autentificare
+
+                .antMatchers("/price").permitAll()// Permiti accesul public pentru inregistrare si autentificare
+                .antMatchers("/review/*").permitAll()// Permiti accesul public pentru inregistrare si autentificare
+                .antMatchers("/review/*/*").permitAll()// Permiti accesul public pentru inregistrare si autentificare
+
+                .antMatchers("/review").permitAll()// Permiti accesul public pentru inregistrare si autentificare
                 .antMatchers("/api/admin/*").hasRole("ADMIN")// Permiti accesul doar pentru rolul ADMIN la /api/admin/*
-               // .anyRequest().authenticated()
-                .anyRequest().permitAll()
+                .anyRequest().authenticated()
+                //.anyRequest().permitAll()
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()

@@ -1,6 +1,9 @@
 package com.healthwise.HealthwiseApp.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -26,11 +29,13 @@ public class Specialization {
     @Column(nullable = false, unique = true)
     private String name;
 
-    @Column(nullable = false)
+    @Column(nullable = false,  columnDefinition = "LONGTEXT")
     private String description;
 
+    @Column(nullable = false,  columnDefinition = "LONGTEXT")
+    private String descriptionDisease;
 
-    @JsonIgnore
+    @JsonIgnoreProperties("specializations")
     @ManyToMany(mappedBy = "specializations", fetch = FetchType.EAGER)
     private List<Doctor> doctors = new ArrayList<>();
 }

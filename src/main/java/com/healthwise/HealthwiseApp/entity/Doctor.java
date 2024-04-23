@@ -1,6 +1,8 @@
 package com.healthwise.HealthwiseApp.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 
 import javax.persistence.*;
@@ -30,11 +32,11 @@ public class Doctor {
     @Column(nullable = false)
     private String description;
 
-    @JsonIgnore
     @Lob
     @Column(columnDefinition = "LONGBLOB")
     private byte[] image;
 
+    @JsonIgnoreProperties("doctors")
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "DOCTOR_SPECIALIZATION",
             joinColumns = {
@@ -46,6 +48,7 @@ public class Doctor {
     )
     private List<Specialization> specializations = new ArrayList<>();
 
+    @JsonIgnoreProperties("doctors")
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(name = "DOCTOR_LOCATION",
             joinColumns = {

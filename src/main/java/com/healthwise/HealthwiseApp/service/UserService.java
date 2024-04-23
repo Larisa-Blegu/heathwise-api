@@ -3,6 +3,8 @@ package com.healthwise.HealthwiseApp.service;
 import com.healthwise.HealthwiseApp.dto.UserDTO;
 import com.healthwise.HealthwiseApp.dto.UserDTOToken;
 import com.healthwise.HealthwiseApp.dto.buider.UserBuilder;
+import com.healthwise.HealthwiseApp.entity.Appointment;
+import com.healthwise.HealthwiseApp.entity.Specialization;
 import com.healthwise.HealthwiseApp.entity.User;
 import com.healthwise.HealthwiseApp.repository.UserRepository;
 import com.healthwise.HealthwiseApp.util.exception.ResourceNotFoundException;
@@ -29,22 +31,20 @@ public class UserService {
     private UserBuilder userBuilder;
     @Autowired
     private JwtService jwtService;
+    @Autowired
+    private AppointmentService appointmentService;
 
     private AuthenticationManager authenticationManager;
 
     private final PasswordEncoder passwordEncoder;
-    public UserDTO getUserByEmail(String email) {
+    public User getUserByEmail(String email) {
 
-        User userOptional = userRepository.findByEmail(email);
+        return userRepository.findByEmail(email);
 
-        UserDTO userDTO = userBuilder.toUserDTO(userOptional);
-
-        if(userOptional != null) {
-            return userDTO;
-        } else {
-            throw new ResourceNotFoundException(User.class.getSimpleName() + " with email: " + email);
-        }
     }
+//    public List<Specialization> getSpecializationByName(String name){
+//        return specializationRepository.getSpecializationByName(name);
+//    }
     public User addUser(User user){
         return userRepository.save(user);
     }
@@ -94,6 +94,10 @@ public class UserService {
     public Boolean deleteUserById(int id) {
         if (!userRepository.existsById(id)) {
             throw new ResourceNotFoundException("User with ID " + id + " not found");
+        }
+        List<Appointment> appointments = appointmentService.getAppointmentByUserId(id);
+        for (Appointment appointment : appointments) {
+            appointmentService.deleteAppointmentById(appointment.getId());
         }
         userRepository.deleteById(id);
         return true;

@@ -1,5 +1,6 @@
 package com.healthwise.HealthwiseApp.repository;
 
+import com.healthwise.HealthwiseApp.entity.Appointment;
 import com.healthwise.HealthwiseApp.entity.Price;
 import com.healthwise.HealthwiseApp.entity.Review;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -11,5 +12,6 @@ import java.util.List;
 public interface PriceRepository extends JpaRepository<Price, Integer> {
     List<Price> findByDoctorId(int doctorId);
     List<Price> findByMedicalProcedureId(int procedureId);
+    List<Price> findByDoctorIdAndMedicalProcedureId(int doctorId, int procedureId);
 
 }

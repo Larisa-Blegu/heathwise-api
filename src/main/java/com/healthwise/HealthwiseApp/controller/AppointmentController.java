@@ -1,13 +1,17 @@
 package com.healthwise.HealthwiseApp.controller;
 
-import com.healthwise.HealthwiseApp.entity.Appointment;
-import com.healthwise.HealthwiseApp.entity.Contact;
-import com.healthwise.HealthwiseApp.service.AppointmentService;
-import com.healthwise.HealthwiseApp.service.ContactService;
+import com.healthwise.HealthwiseApp.dto.AppointmentDTO;
+import com.healthwise.HealthwiseApp.dto.ContactDTO;
+import com.healthwise.HealthwiseApp.dto.UserDTO;
+import com.healthwise.HealthwiseApp.entity.*;
+import com.healthwise.HealthwiseApp.response.PaymentResponse;
+import com.healthwise.HealthwiseApp.service.*;
+import com.stripe.exception.StripeException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,6 +23,16 @@ import java.util.Optional;
 public class AppointmentController {
     @Autowired
     private AppointmentService appointmentService;
+    @Autowired
+    private DoctorService doctorService;
+    @Autowired
+    private LocationService locationService;
+    @Autowired
+    private MedicalProcedureService medicalProcedureService;
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private PaymentService paymentService;
     @PostMapping()
     public ResponseEntity<?> addAppointment(@RequestBody Appointment appointment){
         Appointment newAppointment = appointmentService.addAppointment(appointment);
@@ -44,12 +58,19 @@ public class AppointmentController {
         List<Appointment> appointments = appointmentService.getAppointmentByUserId(userId);
         return ResponseEntity.ok(appointments);
     }
-    @PutMapping("/update/{id}")
-    public ResponseEntity<?> updateAppointment(@PathVariable int id, @RequestBody Appointment updatedAppointment) {
-        updatedAppointment.setId(id);
-        Appointment updated = appointmentService.updateAppointment(updatedAppointment);
+    @PutMapping()
+    public ResponseEntity<?> updateAppointment(@RequestBody AppointmentDTO updatedAppointment) {
+        List<Location> location = locationService.getLocationByHospital(updatedAppointment.getLocation());
+        List<Doctor> doctor = doctorService.getDoctorsByName(updatedAppointment.getDoctor());
+        List<MedicalProcedure> medicalProcedure = medicalProcedureService.getProcedureByName(updatedAppointment.getMedicalProcedure());
+        User user = userService.getUserByEmail(updatedAppointment.getUser());
+        Appointment newAppointment = new Appointment(updatedAppointment.getId(), updatedAppointment.getDate(),
+                updatedAppointment.getType(), location.get(0), doctor.get(0),medicalProcedure.get(0) , user,
+                updatedAppointment.getStatus(), updatedAppointment.getReviewStatus());
+        Appointment updated = appointmentService.updateAppointment(newAppointment);
         return ResponseEntity.ok("Appointment updated");
     }
+
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Boolean> deleteAppointmentById(@PathVariable int id) {
         Boolean isDeleted = appointmentService.deleteAppointmentById(id);
@@ -65,5 +86,11 @@ public class AppointmentController {
     public ResponseEntity<Boolean> changeReviewStatus(@PathVariable int id, @PathVariable String status){
         Boolean isChanged = appointmentService.changeReviewStatus(id, status);
         return new ResponseEntity<>(isChanged, HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/payment/{appointmentId}")
+    public ResponseEntity<PaymentResponse> makePayment(@PathVariable int appointmentId) throws StripeException {
+        PaymentResponse response = paymentService.createPaymentLink(appointmentId);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

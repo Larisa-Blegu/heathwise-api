@@ -12,4 +12,8 @@ import java.util.List;
 public interface DoctorRepository extends JpaRepository<Doctor,Integer> {
     @Query("SELECT d from Doctor d WHERE d.fullName LIKE :partialName")
     public List<Doctor> getDoctorsByName(String partialName);
+
+    @Query("SELECT d FROM Doctor d WHERE d.id = :id")
+    public Doctor getById(int id);
+
 }

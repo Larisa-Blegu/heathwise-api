@@ -1,8 +1,12 @@
 package com.healthwise.HealthwiseApp.controller;
 
+import com.healthwise.HealthwiseApp.dto.ContactDTO;
+import com.healthwise.HealthwiseApp.dto.ReviewDTO;
 import com.healthwise.HealthwiseApp.entity.Contact;
+import com.healthwise.HealthwiseApp.entity.Doctor;
 import com.healthwise.HealthwiseApp.entity.Review;
 import com.healthwise.HealthwiseApp.service.ContactService;
+import com.healthwise.HealthwiseApp.service.DoctorService;
 import com.healthwise.HealthwiseApp.service.ReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,6 +23,8 @@ import java.util.Optional;
 public class ReviewController {
     @Autowired
     private ReviewService reviewService;
+    @Autowired
+    private DoctorService doctorService;
     @PostMapping()
     public ResponseEntity<?> addReview(@RequestBody Review review){
         Review newReview = reviewService.addReview(review);
@@ -51,12 +57,14 @@ public class ReviewController {
         return ResponseEntity.ok(counter);
     }
 
-    @PutMapping("/update/{id}")
-    public ResponseEntity<?> updateReview(@PathVariable int id, @RequestBody Review updatedReview) {
-        updatedReview.setId(id);
-        Review updated = reviewService.updateReview(updatedReview);
+    @PutMapping()
+    public ResponseEntity<?> updateReview( @RequestBody ReviewDTO updatedReview) {
+        List<Doctor> doctor = doctorService.getDoctorsByName(updatedReview.getDoctor());
+        Review newReview = new Review(updatedReview.getId(), updatedReview.getText(),updatedReview.getGrade(), doctor.get(0));
+        Review updated = reviewService.updateReview(newReview);
         return ResponseEntity.ok("Review updated");
     }
+
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Boolean> deleteReviewById(@PathVariable int id) {
         Boolean isDeleted = reviewService.deleteReviewById(id);
