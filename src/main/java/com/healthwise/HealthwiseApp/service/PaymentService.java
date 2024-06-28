@@ -24,6 +24,7 @@ public class PaymentService {
     private PriceRepository priceRepository;
     @Autowired
     private  AppointmentRepository appointmentRepository;
+
     public PaymentResponse createPaymentLink(int appointmentId) throws StripeException {
 
         Stripe.apiKey = stripeSecreteKey;
@@ -59,7 +60,6 @@ public class PaymentService {
 
         PaymentResponse response = new PaymentResponse();
         response.setPayment_url(session.getUrl());
-
 
         return response;
     }

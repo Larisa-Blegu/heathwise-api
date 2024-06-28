@@ -16,18 +16,23 @@ public class ContactService {
 
     @Autowired
     private ContactRepository contactRepository;
+
     public Contact addContact(Contact contact){
         return contactRepository.save(contact);
     }
+
     public List<Contact> getAllContacts(){
         return contactRepository.findAll();
     }
+
     public Optional<Contact> getContactById(int id){
         return contactRepository.findById(id);
     }
+
     public List<Contact> getContactByDoctorId(int doctorId) {
         return contactRepository.findByDoctorId(doctorId);
     }
+
     public Contact updateContact(Contact updatedContact) {
         Optional<Contact> existingContact = contactRepository.findById(updatedContact.getId());
         if (existingContact.isPresent()) {
@@ -39,6 +44,7 @@ public class ContactService {
             throw new ResourceNotFoundException("Contact with id: " + updatedContact.getId() + " not found");
         }
     }
+
     public Boolean deleteContactById(int id) {
         if (!contactRepository.existsById(id)) {
             throw new ResourceNotFoundException("Contact with ID " + id + " not found");

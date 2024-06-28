@@ -10,8 +10,8 @@ import java.util.List;
 
 @Repository
 public interface MedicalProcedureRepository extends JpaRepository<MedicalProcedure, Integer> {
+
     List<MedicalProcedure> getProcedureByName(String name);
     List<MedicalProcedure> getProcedureByCategory(String category);
     List<MedicalProcedure> findBySpecializationId(int doctorId);
-
 }

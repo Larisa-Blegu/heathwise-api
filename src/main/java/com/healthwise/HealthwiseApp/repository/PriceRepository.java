@@ -10,8 +10,8 @@ import java.util.List;
 
 @Repository
 public interface PriceRepository extends JpaRepository<Price, Integer> {
+
     List<Price> findByDoctorId(int doctorId);
     List<Price> findByMedicalProcedureId(int procedureId);
     List<Price> findByDoctorIdAndMedicalProcedureId(int doctorId, int procedureId);
-
 }

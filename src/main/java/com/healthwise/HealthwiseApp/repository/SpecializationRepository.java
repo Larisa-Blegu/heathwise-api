@@ -8,7 +8,7 @@ import java.util.List;
 
 @Repository
 public interface SpecializationRepository extends JpaRepository<Specialization, Integer> {
-    List<Specialization> getSpecializationByName(String name);
 
+    List<Specialization> getSpecializationByName(String name);
     List<Specialization> findByDoctorsId(int doctorId);
 }

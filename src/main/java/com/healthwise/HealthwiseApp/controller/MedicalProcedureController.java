@@ -19,38 +19,52 @@ import java.util.Optional;
 @RequestMapping("/medicalProcedure")
 @CrossOrigin(origins = "http://localhost:3000")
 public class MedicalProcedureController {
+
     @Autowired
     private MedicalProcedureService medicalProcedureService;
     @Autowired
     private SpecializationService specializationService;
+
     @PostMapping()
-    public ResponseEntity<?> addProcedure(@RequestBody MedicalProcedure medicalProcedure){
+    public ResponseEntity<?> addProcedure(@RequestBody MedicalProcedure medicalProcedure) {
         MedicalProcedure newMedicalProcedure = medicalProcedureService.addProcedure(medicalProcedure);
         return ResponseEntity.ok("Procedure added");
     }
+
     @GetMapping(value = "/allProcedures")
-    public ResponseEntity<List<MedicalProcedure>> getAllProcedures(){
+    public ResponseEntity<List<MedicalProcedure>> getAllProcedures() {
         List<MedicalProcedure> allProcedures = medicalProcedureService.getAllProcedures();
         return ResponseEntity.ok(allProcedures);
     }
+
     @GetMapping(value = "/{id}")
-    public ResponseEntity<?> getProcedureById(@PathVariable int id){
+    public ResponseEntity<?> getProcedureById(@PathVariable int id) {
         Optional<MedicalProcedure> procedure = medicalProcedureService.getProcedureById(id);
         return ResponseEntity.ok(procedure);
     }
-    @GetMapping(value="/name/{name}")
-    public ResponseEntity<?> getProcedureByName(@PathVariable String name){
+
+    @GetMapping(value = "/name/{name}")
+    public ResponseEntity<?> getProcedureByName(@PathVariable String name) {
         List<MedicalProcedure> allProcedures = medicalProcedureService.getProcedureByName(name);
         return ResponseEntity.ok(allProcedures);
     }
-    @GetMapping(value="/category/{category}")
-    public ResponseEntity<?> getProcedureByCategory(@PathVariable String category){
+
+    @GetMapping(value = "/category/{category}")
+    public ResponseEntity<?> getProcedureByCategory(@PathVariable String category) {
         List<MedicalProcedure> allProcedures = medicalProcedureService.getProcedureByCategory(category);
         return ResponseEntity.ok(allProcedures);
     }
+
     @GetMapping("/specialization/{specializationId}")
     public ResponseEntity<List<MedicalProcedure>> getProcedureBySpecializationId(@PathVariable int specializationId) {
         List<MedicalProcedure> procedures = medicalProcedureService.getProcedureBySpecializationId(specializationId);
+        return ResponseEntity.ok(procedures);
+
+    }
+
+    @GetMapping(value = "/doctor/{name}")
+    public ResponseEntity<List<MedicalProcedure>> getProcedureByDoctorId(@PathVariable String name) {
+        List<MedicalProcedure> procedures = medicalProcedureService.getProcedureByDoctorId(name);
         return ResponseEntity.ok(procedures);
     }
 

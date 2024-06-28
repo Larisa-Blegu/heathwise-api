@@ -21,25 +21,30 @@ import java.util.Optional;
 @RequestMapping("/review")
 @CrossOrigin(origins = "http://localhost:3000")
 public class ReviewController {
+
     @Autowired
     private ReviewService reviewService;
     @Autowired
     private DoctorService doctorService;
+
     @PostMapping()
-    public ResponseEntity<?> addReview(@RequestBody Review review){
+    public ResponseEntity<?> addReview(@RequestBody Review review) {
         Review newReview = reviewService.addReview(review);
         return ResponseEntity.ok("Review added");
     }
+
     @GetMapping()
-    public ResponseEntity<List<Review>> getAllReviews(){
+    public ResponseEntity<List<Review>> getAllReviews() {
         List<Review> allReviews = reviewService.getAllReviews();
         return ResponseEntity.ok(allReviews);
     }
+
     @GetMapping(value = "/{id}")
-    public ResponseEntity<?> getReviewById(@PathVariable int id){
+    public ResponseEntity<?> getReviewById(@PathVariable int id) {
         Optional<Review> review = reviewService.getReviewById(id);
         return ResponseEntity.ok(review);
     }
+
     @GetMapping("/doctor/{doctorId}")
     public ResponseEntity<List<Review>> getReviewsByDoctorId(@PathVariable int doctorId) {
         List<Review> reviews = reviewService.getReviewsByDoctorId(doctorId);
@@ -47,20 +52,21 @@ public class ReviewController {
     }
 
     @GetMapping("/avg/{doctorId}")
-    public ResponseEntity<?> getAvgReviewGrade(@PathVariable int doctorId){
+    public ResponseEntity<?> getAvgReviewGrade(@PathVariable int doctorId) {
         Double avg = reviewService.getAvgReviewGrade(doctorId);
         return ResponseEntity.ok(avg);
     }
+
     @GetMapping("/counter/{doctorId}")
-    public ResponseEntity<?> getReviewCounter(@PathVariable int doctorId){
+    public ResponseEntity<?> getReviewCounter(@PathVariable int doctorId) {
         int counter = reviewService.getReviewCounter(doctorId);
         return ResponseEntity.ok(counter);
     }
 
     @PutMapping()
-    public ResponseEntity<?> updateReview( @RequestBody ReviewDTO updatedReview) {
+    public ResponseEntity<?> updateReview(@RequestBody ReviewDTO updatedReview) {
         List<Doctor> doctor = doctorService.getDoctorsByName(updatedReview.getDoctor());
-        Review newReview = new Review(updatedReview.getId(), updatedReview.getText(),updatedReview.getGrade(), doctor.get(0));
+        Review newReview = new Review(updatedReview.getId(), updatedReview.getText(), updatedReview.getGrade(), doctor.get(0));
         Review updated = reviewService.updateReview(newReview);
         return ResponseEntity.ok("Review updated");
     }

@@ -19,28 +19,34 @@ import java.util.Optional;
 @RequestMapping("/price")
 @CrossOrigin(origins = "http://localhost:3000")
 public class PriceController {
+
     @Autowired
     private PriceService priceService;
+
     @PostMapping()
-    public ResponseEntity<?> addPrice(@RequestBody Price price){
+    public ResponseEntity<?> addPrice(@RequestBody Price price) {
         Price newPrice = priceService.addPrice(price);
         return ResponseEntity.ok("Price added");
     }
+
     @GetMapping(value = "/allPrices")
-    public ResponseEntity<List<Price>> getAllPrices(){
+    public ResponseEntity<List<Price>> getAllPrices() {
         List<Price> allPrices = priceService.getAllPrices();
         return ResponseEntity.ok(allPrices);
     }
+
     @GetMapping(value = "/{id}")
-    public ResponseEntity<?> getPriceById(@PathVariable int id){
+    public ResponseEntity<?> getPriceById(@PathVariable int id) {
         Optional<Price> price = priceService.getPriceById(id);
         return ResponseEntity.ok(price);
     }
+
     @GetMapping("/doctor/{doctorId}")
     public ResponseEntity<List<Price>> getPriceByDoctorId(@PathVariable int doctorId) {
         List<Price> prices = priceService.getPriceByDoctorId(doctorId);
         return ResponseEntity.ok(prices);
     }
+
     @GetMapping("/procedure/{procedureId}")
     public ResponseEntity<List<Price>> getPriceByProcedureId(@PathVariable int procedureId) {
         List<Price> prices = priceService.getPriceByProcedureId(procedureId);
@@ -48,15 +54,17 @@ public class PriceController {
     }
 
     @GetMapping("/doctorAndProcedure/{doctorId}/{procedureId}")
-    public ResponseEntity<List<Price>> getPriceByDoctorIdProcedureId(@PathVariable int doctorId, @PathVariable int procedureId){
+    public ResponseEntity<List<Price>> getPriceByDoctorIdProcedureId(@PathVariable int doctorId, @PathVariable int procedureId) {
         List<Price> prices = priceService.getPriceByDoctorIdProcedureId(doctorId, procedureId);
         return ResponseEntity.ok(prices);
     }
+
     @PutMapping()
     public ResponseEntity<?> updatePrice(@RequestBody Price updatedPrice) {
         Price updated = priceService.updatePrice(updatedPrice);
         return ResponseEntity.ok("Price updated");
     }
+
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Boolean> deletePriceById(@PathVariable int id) {
         Boolean isDeleted = priceService.deletePriceById(id);

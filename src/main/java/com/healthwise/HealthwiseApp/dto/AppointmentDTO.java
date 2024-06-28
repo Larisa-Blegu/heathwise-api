@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
 public class AppointmentDTO {
+
     private int id;
     private LocalDateTime date;
     private AppointmentType type;

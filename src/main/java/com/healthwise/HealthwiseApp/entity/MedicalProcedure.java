@@ -16,7 +16,7 @@ public class MedicalProcedure {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(nullable = false)
+    @Column(nullable = false,  columnDefinition = "LONGTEXT")
     private String category;
 
     @Column(nullable = false, unique = true)

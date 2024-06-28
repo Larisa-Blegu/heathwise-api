@@ -3,6 +3,8 @@ package com.healthwise.HealthwiseApp.controller;
 import com.healthwise.HealthwiseApp.dto.UserDTO;
 import com.healthwise.HealthwiseApp.dto.UserDTOToken;
 import com.healthwise.HealthwiseApp.dto.buider.UserBuilder;
+import com.healthwise.HealthwiseApp.entity.Doctor;
+import com.healthwise.HealthwiseApp.entity.DoctorUser;
 import com.healthwise.HealthwiseApp.entity.User;
 import com.healthwise.HealthwiseApp.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,47 +21,73 @@ import java.util.UUID;
 @RequestMapping("/user")
 @CrossOrigin(origins = "http://localhost:3000")
 public class UserController {
+
     @Autowired
     private UserService userService;
     @Autowired
     private UserBuilder userBuilder;
+
     @PostMapping()
-    public ResponseEntity<?> addUser(@RequestBody UserDTO userDTO){
+    public ResponseEntity<?> addUser(@RequestBody UserDTO userDTO) {
         User user = userBuilder.toUserEntity(userDTO);
         userService.addUser(user);
         return ResponseEntity.ok("User added");
     }
+
     @PostMapping(value = "/register")
-    public ResponseEntity<?> register(@RequestBody UserDTO userDTO){
+    public ResponseEntity<?> register(@RequestBody UserDTO userDTO) {
         return ResponseEntity.ok(userService.register(userDTO));
     }
+
     @PostMapping(value = "/login")
-    public ResponseEntity<?> login(@RequestBody UserDTO userDTO){
+    public ResponseEntity<?> login(@RequestBody UserDTO userDTO) {
         UserDTOToken userDTOToken = userService.login(userDTO);
-        if(userDTOToken != null){
+        if (userDTOToken != null) {
             return new ResponseEntity<>(userDTOToken, HttpStatus.OK);
-        }else{
+        } else {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
     }
+
     @GetMapping(value = "/allUsers")
-    public ResponseEntity<List<User>> getAllUsers(){
+    public ResponseEntity<List<User>> getAllUsers() {
         List<User> allUsers = userService.getAllUsers();
         return ResponseEntity.ok(allUsers);
     }
+
     @GetMapping(value = "/{id}")
     public ResponseEntity<UserDTO> getUserById(@PathVariable("id") int id) {
         UserDTO userResponseDTO = userService.getUserById(id);
         return new ResponseEntity<>(userResponseDTO, HttpStatus.OK);
     }
+
+    @GetMapping(value = "/email/{email}")
+    public ResponseEntity<User> getUserByEmail(@PathVariable String email) {
+        User userResponse = userService.getUserByEmail(email);
+        return new ResponseEntity<>(userResponse, HttpStatus.OK);
+    }
+
     @PutMapping()
     public ResponseEntity<UserDTO> updateUser(@RequestBody UserDTO userDTO) {
         UserDTO user = userService.updateUser(userDTO);
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
+
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Boolean> deleteUserById(@PathVariable("id") int id) {
         Boolean isDeleted = userService.deleteUserById(id);
         return new ResponseEntity<>(isDeleted, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "doctor/{userId}")
+    public ResponseEntity<Doctor> getDoctorByUserId(@PathVariable int userId){
+        Doctor doctor = userService.getDoctorIdByUserId(userId);
+        return new ResponseEntity<>(doctor, HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/doctor")
+    public ResponseEntity<?> addDoctorUser(@RequestBody DoctorUser doctorUser) {
+        userService.addDoctorUser(doctorUser);
+        return new ResponseEntity<>("Added successfully", HttpStatus.CREATED);
     }
 }

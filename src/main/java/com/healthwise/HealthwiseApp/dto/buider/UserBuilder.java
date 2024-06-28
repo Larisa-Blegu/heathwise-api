@@ -7,8 +7,10 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class UserBuilder {
+
     private UserBuilder() {
     }
+
     public static UserDTO toUserDTO(User user) {
         return new UserDTO(
                 user.getId(),
@@ -20,6 +22,7 @@ public class UserBuilder {
                 user.getRole()
         );
     }
+
     public static User toUserEntity(UserDTO userDTO) {
         return new User(
                 userDTO.getId(),
@@ -31,6 +34,7 @@ public class UserBuilder {
                 userDTO.getRole()
         );
     }
+
     public static UserDTOToken toUserDTOToken(User user, String token) {
         return new UserDTOToken(
                 user.getId(),

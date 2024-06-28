@@ -29,7 +29,7 @@ public class Doctor {
     @Column(nullable = false)
     private String medicineDegree;
 
-    @Column(nullable = false)
+    @Column(nullable = false,  columnDefinition = "LONGTEXT")
     private String description;
 
     @Lob

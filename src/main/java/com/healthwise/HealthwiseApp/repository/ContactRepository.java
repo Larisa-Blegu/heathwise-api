@@ -10,6 +10,6 @@ import java.util.List;
 
 @Repository
 public interface ContactRepository extends JpaRepository<Contact,Integer> {
-    List<Contact> findByDoctorId(int doctorId);
 
+    List<Contact> findByDoctorId(int doctorId);
 }

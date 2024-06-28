@@ -10,6 +10,9 @@ import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.Month;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,21 +25,27 @@ public class AppointmentService {
 
     @Autowired
     private EmailSenderService emailSenderService;
+
     public Appointment addAppointment(Appointment appointment){
         return appointmentRepository.save(appointment);
     }
+
     public List<Appointment> getAllAppointments(){
         return appointmentRepository.findAll();
     }
+
     public Optional<Appointment> getAppointmentById(int id){
         return appointmentRepository.findById(id);
     }
+
     public List<Appointment> getAppointmentByDoctorId(int doctorId) {
         return appointmentRepository.findByDoctorId(doctorId);
     }
+
     public List<Appointment> getAppointmentByUserId(int userId) {
         return appointmentRepository.findByUserId(userId);
     }
+
     public Appointment updateAppointment(Appointment updatedAppointment) {
         Optional<Appointment> existingAppointment = appointmentRepository.findById(updatedAppointment.getId());
         if (existingAppointment.isPresent()) {
@@ -54,6 +63,7 @@ public class AppointmentService {
             throw new ResourceNotFoundException("Appointment with id: " + updatedAppointment.getId() + " not found");
         }
     }
+
     public Boolean deleteAppointmentById(int id) {
         if (!appointmentRepository.existsById(id)) {
             throw new ResourceNotFoundException("Appointment with ID " + id + " not found");
@@ -61,11 +71,15 @@ public class AppointmentService {
         appointmentRepository.deleteById(id);
         return true;
     }
+
     public Boolean changeAppointmentStatus(int appointmentId, String status){
         Appointment appointment = appointmentRepository.getById(appointmentId);
 
         if(appointment != null){
-            if(status.equals("APPROVED")){
+            if(status.equals("WAITING_FOR_PAYMENT")){
+                appointment.setStatus(AppointmentStatus.WAITING_FOR_PAYMENT);
+            }
+            else if(status.equals("APPROVED")){
                 appointment.setStatus(AppointmentStatus.APPROVED);
                 this.sendEmail(appointment);
             }else{
@@ -77,6 +91,7 @@ public class AppointmentService {
             return false;
         }
     }
+
     public void sendEmail(Appointment appointment){
         User user = appointment.getUser();
         MedicalProcedure medicalProcedure = appointment.getMedicalProcedure();
@@ -91,6 +106,7 @@ public class AppointmentService {
         }
         emailSenderService.sendEmail(user.getEmail(), "Programare la " + medicalProcedure.getName(), message);
     }
+
     public Boolean changeReviewStatus(int appointmentId, String status){
         Appointment appointment = appointmentRepository.getById(appointmentId);
         if(appointment != null){
@@ -100,5 +116,26 @@ public class AppointmentService {
         }else{
             return false;
         }
+    }
+
+    public List<Integer> getMonthlyAppointmentCounts(LocalDateTime dateInitial, LocalDateTime dateFinal) {
+        List<Appointment> appointments = appointmentRepository.findAppointmentsBetweenDates(dateInitial, dateFinal);
+        List<Integer> monthlyCounts = new ArrayList<>(12);
+        for (int i = 0; i < 12; i++) {
+            monthlyCounts.add(0);
+        }
+
+        for (Appointment appointment : appointments) {
+            Month month = appointment.getDate().getMonth();
+            int monthIndex = month.getValue()-1;
+            monthlyCounts.set(monthIndex, monthlyCounts.get(monthIndex)+1);
+        }
+
+        return monthlyCounts;
+    }
+
+    public List<Appointment> getAppointmentsByDate(LocalDateTime dateInitial, LocalDateTime dateFinal){
+        List<Appointment> appointments = appointmentRepository.findAppointmentsBetweenDates(dateInitial,dateFinal);
+        return appointments;
     }
 }

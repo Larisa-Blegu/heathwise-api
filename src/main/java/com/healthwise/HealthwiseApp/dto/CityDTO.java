@@ -7,10 +7,8 @@ import lombok.Data;
 @Builder
 @Data
 @AllArgsConstructor
-public class ReviewDTO {
+public class CityDTO {
 
-    private int id;
-    private int grade;
-    private String text;
-    private String doctor;
+    private String city;
+    private int hospitalsNumber;
 }

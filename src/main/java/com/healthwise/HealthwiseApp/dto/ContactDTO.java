@@ -8,8 +8,8 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class ContactDTO {
+
     private int id;
     private String email;
     private String doctor;
-
 }

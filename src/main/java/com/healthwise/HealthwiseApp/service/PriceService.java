@@ -16,18 +16,23 @@ public class PriceService {
 
     @Autowired
     private PriceRepository priceRepository;
+
     public Price addPrice(Price price){
         return priceRepository.save(price);
     }
+
     public List<Price> getAllPrices(){
         return priceRepository.findAll();
     }
+
     public Optional<Price> getPriceById(int id){
         return priceRepository.findById(id);
     }
+
     public List<Price> getPriceByDoctorId(int doctorId) {
         return priceRepository.findByDoctorId(doctorId);
     }
+
     public List<Price> getPriceByProcedureId(int procedureId) {
         return priceRepository.findByMedicalProcedureId(procedureId);
     }
@@ -35,6 +40,7 @@ public class PriceService {
     public List<Price> getPriceByDoctorIdProcedureId(int doctorId, int procedureId){
         return priceRepository.findByDoctorIdAndMedicalProcedureId(doctorId, procedureId);
     }
+
     public Price updatePrice(Price updatedPrice) {
         Optional<Price> existingPrice = priceRepository.findById(updatedPrice.getId());
         if (existingPrice.isPresent()) {
@@ -47,6 +53,7 @@ public class PriceService {
             throw new ResourceNotFoundException("Price with id: " + updatedPrice.getId() + " not found");
         }
     }
+
     public Boolean deletePriceById(int id) {
         if (!priceRepository.existsById(id)) {
             throw new ResourceNotFoundException("Price with ID " + id + " not found");

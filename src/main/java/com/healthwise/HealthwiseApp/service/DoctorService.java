@@ -25,19 +25,24 @@ public class DoctorService {
     private SpecializationRepository specializationRepository;
     @Autowired
     private LocationRepository locationRepository;
+
     public Doctor addDoctor(Doctor doctor){
         return doctorRepository.save(doctor);
     }
+
     public List<Doctor> getAllDoctors(){
         return doctorRepository.findAll();
     }
+
     public Doctor getDoctorById(int id){
         return doctorRepository.getById(id);
     }
+
     public List<Doctor> getDoctorsByName(String partialName){
         String newPartialName = "%" + partialName + "%";
         return doctorRepository.getDoctorsByName(newPartialName);
     }
+
     public Doctor updateDoctor(Doctor updatedDoctor) {
         Optional<Doctor> existingDoctor = doctorRepository.findById(updatedDoctor.getId());
         if (existingDoctor.isPresent()) {
@@ -51,6 +56,14 @@ public class DoctorService {
             throw new ResourceNotFoundException("Doctor with id: " + updatedDoctor.getId() + " not found");
         }
     }
+
+    public Doctor updateImage(int id, byte[] image) {
+        Doctor doctor = doctorRepository.findById(id).orElseThrow();
+        doctor.setImage(image);
+        return doctorRepository.save(doctor);
+    }
+
+
     public Boolean deleteDoctorById(int id) {
         if (!doctorRepository.existsById(id)) {
             throw new ResourceNotFoundException("Doctor with ID " + id + " not found");
@@ -58,12 +71,14 @@ public class DoctorService {
         doctorRepository.deleteById(id);
         return true;
     }
+
     public void addDoctorSpecialization(int doctorId, Specialization specialization){
         Doctor doctor = doctorRepository.getById(doctorId);
         doctor.getSpecializations().add(specialization);
         specialization.getDoctors().add(doctor);
         doctorRepository.save(doctor);
     }
+
     public void deleteDoctorSpecialization(int doctorId, Specialization newSpecialization) {
         Specialization specialization = specializationRepository.getById(newSpecialization.getId());
         Doctor doctor = doctorRepository.getById(doctorId);
@@ -71,12 +86,14 @@ public class DoctorService {
         specialization.getDoctors().remove(doctor);
         doctorRepository.save(doctor);
     }
+
     public void addDoctorLocation(int doctorId, Location location){
         Doctor doctor = doctorRepository.getById(doctorId);
         doctor.getLocations().add(location);
         location.getDoctors().add(doctor);
         doctorRepository.save(doctor);
     }
+
     public void deleteDoctorLocation(int doctorId, Location existingLocation) {
         Location location = locationRepository.getById(existingLocation.getId());
         Doctor doctor = doctorRepository.getById(doctorId);

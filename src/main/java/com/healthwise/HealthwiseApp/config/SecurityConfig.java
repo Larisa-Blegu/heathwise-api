@@ -67,7 +67,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/review").permitAll()// Permiti accesul public pentru inregistrare si autentificare
                 .antMatchers("/api/admin/*").hasRole("ADMIN")// Permiti accesul doar pentru rolul ADMIN la /api/admin/*
                 .anyRequest().authenticated()
-                //.anyRequest().permitAll()
+
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()

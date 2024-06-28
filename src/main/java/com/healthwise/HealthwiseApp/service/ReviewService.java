@@ -16,18 +16,23 @@ public class ReviewService {
 
     @Autowired
     private ReviewRepository reviewRepository;
+
     public Review addReview(Review review){
         return reviewRepository.save(review);
     }
+
     public List<Review> getAllReviews(){
         return reviewRepository.findAll();
     }
+
     public Optional<Review> getReviewById(int id){
         return reviewRepository.findById(id);
     }
+
     public List<Review> getReviewsByDoctorId(int doctorId) {
         return reviewRepository.findByDoctorId(doctorId);
     }
+
     public Double getAvgReviewGrade(int doctorId) {
         List<Review> reviewList = reviewRepository.findByDoctorId(doctorId);
         Double avg = 0.0;
@@ -44,6 +49,7 @@ public class ReviewService {
         List<Review> reviewList = reviewRepository.findByDoctorId(doctorId);
         return reviewList.size();
     }
+
     public Review updateReview(Review updatedReview) {
         Optional<Review> existingReview = reviewRepository.findById(updatedReview.getId());
         if (existingReview.isPresent()) {
@@ -53,9 +59,10 @@ public class ReviewService {
             review.setDoctor(updatedReview.getDoctor());
             return reviewRepository.save(review);
         } else {
-            throw new ResourceNotFoundException("Contact with id: " + updatedReview.getId() + " not found");
+            throw new ResourceNotFoundException("Review with id: " + updatedReview.getId() + " not found");
         }
     }
+
     public Boolean deleteReviewById(int id) {
         if (!reviewRepository.existsById(id)) {
             throw new ResourceNotFoundException("Review with ID " + id + " not found");
@@ -63,5 +70,4 @@ public class ReviewService {
         reviewRepository.deleteById(id);
         return true;
     }
-
 }

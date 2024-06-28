@@ -8,6 +8,7 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class ProcedureDTO {
+
     private int id;
     private String category;
     private String name;
